@@ -13,18 +13,18 @@ public class TcpServerHandle extends Thread {
     private PrintWriter out;
     private BufferedInputStream in;
     private Socket clientSocket;
+    private final CommandParser cmdParser;
 
     @Inject
-    public TcpServerHandle(@Assisted Socket socket) {
+    public TcpServerHandle(@Assisted Socket socket, CommandParser cmdParser) {
         this.clientSocket = socket;
+        this.cmdParser = cmdParser;
 
     }
     private void handle_commands() throws Exception{
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedInputStream(clientSocket.getInputStream());
-        Command command = CommandParser.parse(in);
-        System.out.println(command.getName());
-        System.out.println(new String(command.getPayload(), "US-ASCII"));
+        Command command = cmdParser.parse(in);
         command.run();
     }
     @Override

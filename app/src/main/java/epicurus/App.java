@@ -11,9 +11,6 @@ import com.google.inject.Injector;
 public class App {
     private final TcpServer server;
 
-    
-
-
     @Inject
     public App(TcpServer server ){
         this.server = server;  

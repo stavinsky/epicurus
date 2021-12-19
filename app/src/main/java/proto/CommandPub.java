@@ -1,6 +1,8 @@
 package proto;
 
 import java.lang.annotation.Retention;
+import java.nio.charset.StandardCharsets;
+
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import javax.inject.Qualifier;
 
@@ -8,26 +10,15 @@ import com.google.inject.Inject;
 
 public class CommandPub extends Command {
 
-    @Qualifier
-    @Retention(RUNTIME)
-    @interface Tst {}
-
-
-
-
-
     private int required_payload;
     public byte[] payload;
     private String topic;
+    private final TstInject tst;
 
     @Inject
-    public CommandPub(@Tst String tst, String[] args) throws CommandException {
+    public CommandPub(String[] args, TstInject tst) throws CommandException {
         super(args);
         this.tst = tst;
-    }
-
-    public CommandPub(String[] args) throws CommandException {
-        super(args);
     }
 
     @Override
@@ -72,7 +63,12 @@ public class CommandPub extends Command {
 
     @Override
     public void run() {
-        System.out.println(tst);   
+        System.out.println(getName());   
+        System.out.println(topic);
+        System.out.println(new String(payload, StandardCharsets.US_ASCII));
+        System.out.println(tst.tst);
+
+           
         
     }
 

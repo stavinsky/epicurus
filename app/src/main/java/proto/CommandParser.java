@@ -5,7 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import com.google.inject.Inject;
+
 public class CommandParser {
+    private final CommandFactory cmdFactory;
+
+    @Inject
+    public CommandParser(CommandFactory cmdFactory){
+        this.cmdFactory = cmdFactory;
+    }
     public static String readLine(BufferedInputStream input) throws IOException{
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         int ch; 
@@ -48,21 +56,17 @@ public class CommandParser {
 
     }
 
-    public static Command parse(BufferedInputStream input) throws CommandException {
+    public Command parse(BufferedInputStream input) throws CommandException {
         String[] header = parse_header(input);
-        String command_string = header[0];
+        String command_name = header[0];
         String[] args = Arrays.copyOfRange(header, 1, header.length);
 
-        if (command_string.equals("pub") ) {
-            Command command = new CommandPub(args);
-            if (command.hasPayload()) {
-                command.setPayload(
-                    parse_payload(input, command.getPayloadSize()));
-            }
-            return command;
- 
+        Command command = cmdFactory.create(command_name, args);
+        if (command.hasPayload()) {
+            command.setPayload(
+                parse_payload(input, command.getPayloadSize()));
         }
-        throw new CommandException("command not found");
+            return command;
 
     }
 }

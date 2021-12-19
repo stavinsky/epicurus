@@ -10,11 +10,11 @@ import java.io.*;
 public class TcpServer {
 
     private ServerSocket serverSocket;
-    private final TcpHandleFactory handle_creator;
+    private final TcpHandleFactory handleFactory;
 
     @Inject
-    TcpServer(TcpHandleFactory handle_creator){
-        this.handle_creator = handle_creator;
+    TcpServer(TcpHandleFactory handleFactory){
+        this.handleFactory = handleFactory;
 
     }
     
@@ -22,7 +22,7 @@ public class TcpServer {
         serverSocket = new ServerSocket(port);
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            handle_creator.create(clientSocket).start();
+            handleFactory.create(clientSocket).start();
 
         }
 
