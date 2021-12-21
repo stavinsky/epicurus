@@ -7,6 +7,7 @@ import com.google.inject.assistedinject.Assisted;
 
 import proto.Command;
 import proto.CommandParser;
+import proto.CommandResult;
 
 
 public class TcpServerHandle extends Thread {
@@ -14,23 +15,29 @@ public class TcpServerHandle extends Thread {
     private BufferedInputStream in;
     private Socket clientSocket;
     private final CommandParser cmdParser;
-
+    private final CommandExecutor cmdExecutor;
     @Inject
-    public TcpServerHandle(@Assisted Socket socket, CommandParser cmdParser) {
+    public TcpServerHandle(
+            @Assisted Socket socket, 
+            CommandParser cmdParser,
+            CommandExecutor cmdExecutor
+        ) {
         this.clientSocket = socket;
         this.cmdParser = cmdParser;
+        this.cmdExecutor = cmdExecutor;
 
     }
-    private void handle_commands() throws Exception{
+    private void handleCommands() throws Exception{
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedInputStream(clientSocket.getInputStream());
         Command command = cmdParser.parse(in);
-        command.run();
+        CommandResult result = cmdExecutor.execute(command);
+        out.println(result);
     }
     @Override
     public void run(){
         try {
-            handle_commands();
+            handleCommands();
         }
         catch (Exception e ) {
             System.out.println(

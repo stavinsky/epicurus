@@ -35,7 +35,7 @@ public class CommandParser {
             throw new ParseCommandException("cant read header line", e);
         }
         String[] split;
-        split = output.split("\s");
+        split = output.split("\\s");
         return split;
     }
 
@@ -66,7 +66,7 @@ public class CommandParser {
             command.setPayload(
                 parse_payload(input, command.getPayloadSize()));
         }
-            return command;
+        return command;
 
     }
 }

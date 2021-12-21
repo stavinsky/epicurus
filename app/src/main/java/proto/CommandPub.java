@@ -1,28 +1,18 @@
 package proto;
-
-import java.lang.annotation.Retention;
 import java.nio.charset.StandardCharsets;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import javax.inject.Qualifier;
 
-import com.google.inject.Inject;
-
-public class CommandPub extends Command {
+public class CommandPub implements Command {
 
     private int required_payload;
     public byte[] payload;
-    private String topic;
-    private final TstInject tst;
+    public String topic;
 
-    @Inject
-    public CommandPub(String[] args, TstInject tst) throws CommandException {
-        super(args);
-        this.tst = tst;
+    public CommandPub(String[] args) throws CommandException {
+        parseArgs(args);
     }
 
-    @Override
-    void parseArgs(String[] args) throws CommandException{
+    public void parseArgs(String[] args) throws CommandException{
         if (args.length != 2) {
             throw new ParseCommandException("wrong number of arguments");
         }
@@ -47,8 +37,8 @@ public class CommandPub extends Command {
     }
 
     @Override
-    public String getName() {
-        return "pub";
+    public AllowedCommands getName() {
+        return AllowedCommands.pub;
     }
 
     @Override
@@ -60,16 +50,4 @@ public class CommandPub extends Command {
     public byte[] getPayload() {
         return payload;
     }
-
-    @Override
-    public void run() {
-        System.out.println(getName());   
-        System.out.println(topic);
-        System.out.println(new String(payload, StandardCharsets.US_ASCII));
-        System.out.println(tst.tst);
-
-           
-        
-    }
-
 }
