@@ -1,6 +1,6 @@
 package proto;
 
-public class ParseCommandException  extends CommandException{
+public class ParseCommandException  extends CommandException {
 
     public ParseCommandException(String message) {
         super(message);

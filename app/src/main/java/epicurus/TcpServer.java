@@ -1,9 +1,10 @@
+
 package epicurus;
-import java.net.*;
 
 import com.google.inject.Inject;
-
-import java.io.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 
 
@@ -13,12 +14,12 @@ public class TcpServer {
     private final TcpHandleFactory handleFactory;
 
     @Inject
-    TcpServer(TcpHandleFactory handleFactory){
+    TcpServer(TcpHandleFactory handleFactory) {
         this.handleFactory = handleFactory;
 
     }
     
-    public void start(int port) throws IOException{
+    public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         while (true) {
             Socket clientSocket = serverSocket.accept();
@@ -27,10 +28,9 @@ public class TcpServer {
         }
 
     }
-    public void stop() throws IOException{
 
+    public void stop() throws IOException {
         serverSocket.close();
-
     }
 
 

@@ -1,10 +1,9 @@
 package proto;
-import java.nio.charset.StandardCharsets;
 
 
 public class CommandPub implements Command {
 
-    private int required_payload;
+    private int requiredPayload;
     public byte[] payload;
     public String topic;
 
@@ -12,15 +11,14 @@ public class CommandPub implements Command {
         parseArgs(args);
     }
 
-    public void parseArgs(String[] args) throws CommandException{
+    public void parseArgs(String[] args) throws CommandException {
         if (args.length != 2) {
             throw new ParseCommandException("wrong number of arguments");
         }
         topic = args[0];
         try {
-            required_payload = Integer.parseInt(args[1]);
-        }
-        catch (NumberFormatException e){
+            requiredPayload = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
             throw new CommandException("cant parse payload size", e);
 
         }
@@ -28,12 +26,12 @@ public class CommandPub implements Command {
 
     @Override
     public boolean hasPayload() {
-        return required_payload > 0;
+        return requiredPayload > 0;
     }
 
     @Override
     public int getPayloadSize() {
-        return required_payload;
+        return requiredPayload;
     }
 
     @Override
